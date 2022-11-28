@@ -1,0 +1,29 @@
+# Env
+.env
+
+# Python
+
+## environments
+.venv
+
+## bytecode
+*.pyc
+*.pyo
+
+## cache
+**/__pycache__/
+
+## python version
+.python-version
+
+## packaging
+*.egg-info/
+build/
+dist/
+
+## local dev stuff
+local/
+
+# IDE/Code specific
+.idea
+.atom
