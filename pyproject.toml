@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "engineering"
+version = "0.0.1"
+description = "Simple API with ML model"
+authors = ["Artem <artctvcode@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.9.15"
+fastapi = "^0.88.0"
+uvicorn = "^0.20.0"
+
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.2.0"
+httpx = "^0.23.1"
+pytest-mock = "^3.10.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
