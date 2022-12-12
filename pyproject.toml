@@ -11,6 +11,7 @@ fastapi = "^0.88.0"
 uvicorn = "^0.20.0"
 redis = "^4.4.0"
 python-dotenv = "^0.21.0"
+python-multipart = "^0.0.5"
 
 
 [tool.poetry.group.test.dependencies]
