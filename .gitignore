@@ -24,6 +24,11 @@ dist/
 ## local dev stuff
 local/
 
+# Docker
+
+## volumes data
+.volumes
+
 # IDE/Code specific
 .idea
 .atom

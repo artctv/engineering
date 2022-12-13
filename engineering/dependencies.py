@@ -1,14 +1,22 @@
-from typing import Generator
+from typing import Generator, Callable
 from redis import ConnectionPool, Redis
 from config import settings
 
 
-_pool: ConnectionPool = ConnectionPool(host=settings.redis.host, port=settings.redis.port, db=settings.redis.db)
+def _get_redis() -> Callable:
+    pool: ConnectionPool = ConnectionPool(
+        host=settings.redis.host,
+        port=settings.redis.port,
+        db=settings.redis.db,
+        password=settings.redis.password
+    )
 
-
-def get_redis() -> Generator[Redis, None, None]:
-    redis = Redis(connection_pool=_pool)
-    try:
+    def inner() -> Generator[Redis, None, None]:
+        redis: Redis = Redis(connection_pool=pool)
         yield redis
-    finally:
         redis.close()
+
+    return inner
+
+
+get_redis = _get_redis()

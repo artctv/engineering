@@ -4,7 +4,7 @@ services:
 
   redis:
     image: redis:latest
-    command: redis-server
+    command: redis-server --requirepass password
     container_name: redis
     hostname: redis
     volumes:
@@ -20,7 +20,7 @@ services:
     image: rediscommander/redis-commander:latest
     restart: always
     environment:
-      - REDIS_HOSTS=local:redis:6379
+      - REDIS_HOSTS=local:redis:6379:0:password
     ports:
     - "5050:8081"
     networks:
