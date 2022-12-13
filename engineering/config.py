@@ -5,10 +5,7 @@ class RedisSettings(BaseSettings):
     host: str = "0.0.0.0"
     port: int = 6379
     db: int = 0
-
-    class Config:
-        env_file = '.env'
-        env_file_encoding = 'utf-8'
+    password: str = 'password'
 
 
 class Settings(BaseSettings):
@@ -36,6 +33,7 @@ class Settings(BaseSettings):
     class Config:
         env_file = '.env'
         env_file_encoding = 'utf-8'
+        env_nested_delimiter = '__'
 
 
 settings: Settings = Settings()
