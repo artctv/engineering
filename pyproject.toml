@@ -12,6 +12,8 @@ uvicorn = "^0.20.0"
 redis = "^4.4.0"
 python-dotenv = "^0.21.0"
 python-multipart = "^0.0.5"
+rq = "^1.11.1"
+typer = "^0.7.0"
 
 
 [tool.poetry.group.test.dependencies]
