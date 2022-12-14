@@ -1,6 +1,25 @@
 import uvicorn
+from typer import Typer, Argument
+from typing import Optional
 from config import settings
+from worker.worker import run as run_worker
+
+
+cli: Typer = Typer()
+
+
+@cli.command()
+def main(worker: Optional[str] = Argument(None)):
+    if worker:
+        run_worker()
+    else:
+        uvicorn.run(
+            "api.app:app",
+            host=settings.api.host,
+            port=settings.api.port,
+            reload=settings.api.reload
+        )
 
 
 if __name__ == "__main__":
-    uvicorn.run("app:app", host=settings.host, port=settings.port, reload=settings.reload)
+    cli()
