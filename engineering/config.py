@@ -1,4 +1,5 @@
 from pydantic import BaseSettings
+from pathlib import Path
 
 
 class RedisSettings(BaseSettings):
@@ -31,7 +32,10 @@ class WorkerSettings(BaseSettings):
         "some_func": "worker.tasks.some_func",
     }
 
+
 class Settings(BaseSettings):
+
+    basedir = Path(__file__).parent.parent
 
     redis: RedisSettings = RedisSettings()
     api: ApiSettings = ApiSettings()
