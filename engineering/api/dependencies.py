@@ -1,4 +1,5 @@
 from typing import Generator, Callable
+from fastapi import Depends
 from redis import ConnectionPool, Redis
 from rq import Queue
 from config import settings
@@ -18,29 +19,18 @@ def _get_pool() -> Callable:
     return inner
 
 
-def _get_redis() -> Callable:
-    get_pool: Callable = _get_pool()
-
-    def inner() -> Generator[Redis, None, None]:
-        redis: Redis = Redis(connection_pool=get_pool())
-        yield redis
-        redis.close()
-
-    return inner
+get_pool: Callable = _get_pool()
 
 
-def _get_queue() -> Callable:
-    get_pool: Callable = _get_pool()
-
-    def inner() -> Generator[Queue, None, None]:
-        queue: Queue = Queue(
-            name=settings.worker.queues[0],
-            connection=Redis(connection_pool=get_pool())
-        )
-        yield queue
-
-    return inner
+def get_redis(pool: ConnectionPool = Depends(get_pool)) -> Generator[Redis, None, None]:
+    redis: Redis = Redis(connection_pool=pool)
+    yield redis
+    redis.close()
 
 
-get_redis: Callable = _get_redis()
-get_queue: Callable = _get_queue()
+def get_queue(redis: Redis = Depends(get_redis)) -> Generator[Queue, None, None]:
+    queue: Queue = Queue(
+        name=settings.worker.queues[0],
+        connection=redis
+    )
+    yield queue
