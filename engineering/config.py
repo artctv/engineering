@@ -8,18 +8,15 @@ class RedisSettings(BaseSettings):
     password: str = 'password'
 
 
-class Settings(BaseSettings):
-    # FastAPI app params
+class ApiSettings(BaseSettings):
     title: str = "API"
     description: str = "Simple API with ML model"
     version: str = "0.0.1"
 
-    # run params
     host: str = "127.0.0.1"
     port: int = 5000
     reload: bool = True
 
-    # API core params
     origins: list[str] = [
         "http://localhost",
         "http://localhost:5000",
@@ -27,8 +24,18 @@ class Settings(BaseSettings):
         "http://127.0.0.1:5000",
     ]
 
-    # redis connection
+
+class WorkerSettings(BaseSettings):
+    queues: list[str] = ["default"]
+    tasks: dict[str, str] = {
+        "some_func": "worker.tasks.some_func",
+    }
+
+class Settings(BaseSettings):
+
     redis: RedisSettings = RedisSettings()
+    api: ApiSettings = ApiSettings()
+    worker: WorkerSettings = WorkerSettings()
 
     class Config:
         env_file = '.env'
