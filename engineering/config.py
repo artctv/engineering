@@ -35,7 +35,7 @@ class WorkerSettings(BaseSettings):
 
 class Settings(BaseSettings):
 
-    basedir = Path(__file__).parent.parent
+    basedir: Path = Path(__file__).parent.parent
 
     redis: RedisSettings = RedisSettings()
     api: ApiSettings = ApiSettings()

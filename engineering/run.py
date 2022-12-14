@@ -1,7 +1,6 @@
 import uvicorn
-from rq import Connection, Worker
 from typer import Typer, Argument
-from typing import Optional, NoReturn
+from typing import Optional
 from config import settings
 from worker.worker import run as run_worker
 
