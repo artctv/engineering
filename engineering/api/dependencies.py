@@ -29,8 +29,5 @@ def get_redis(pool: ConnectionPool = Depends(get_pool)) -> Generator[Redis, None
 
 
 def get_queue(redis: Redis = Depends(get_redis)) -> Generator[Queue, None, None]:
-    queue: Queue = Queue(
-        name=settings.worker.queues[0],
-        connection=redis
-    )
+    queue: Queue = Queue(name=settings.worker.queues[0], connection=redis)
     yield queue
