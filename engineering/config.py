@@ -49,4 +49,3 @@ class Settings(BaseSettings):
 
 
 settings: Settings = Settings()
-print(settings.base_dir)
