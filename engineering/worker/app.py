@@ -6,16 +6,6 @@ from rq.local import LocalStack
 _model_stack = LocalStack()
 
 
-def feature_extractor():
-    feature_extractor = ViTFeatureExtractor.from_pretrained('google/vit-base-patch16-224')
-    return (feature_extractor)
-
-
-def model():
-    model = ViTForImageClassification.from_pretrained('google/vit-base-patch16-224')
-    return(model)
-
-
 def get_model():
     """Get Model."""
     m = _model_stack.top
