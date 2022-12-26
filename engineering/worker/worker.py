@@ -1,6 +1,8 @@
 from rq import Connection, Worker
 from redis import Redis
 from config import settings
+import sys
+import tensorflow as tf
 
 
 def run():
@@ -14,3 +16,8 @@ def run():
         worker: Worker = Worker(settings.worker.queues)
         worker.work()
 
+
+with Connection():
+    qs = sys.argv[1:] or ['default']
+    w = Worker(qs)
+    w.work()
