@@ -17,6 +17,7 @@ typer = "^0.7.0"
 transformers = "^4.25.1"
 tensorflow = "^2.11.0"
 pillow = "^9.3.0"
+torch = "^1.13.1"
 
 
 [tool.poetry.group.test.dependencies]

@@ -7,7 +7,7 @@ cachetools==5.2.0
 certifi==2022.12.7
 charset-normalizer==2.1.1
 click==8.1.3
--e git+ssh://git@github.com/artctv/engineering.git@b724a107f274cf9ff49092c70cc3466b6a23bbc1#egg=engineering
+-e git+ssh://git@github.com/artctv/engineering.git@57eeb55b1c4f7abcb7cc2cc7c1f90bd4b20b4577#egg=engineering
 exceptiongroup==1.0.4
 fastapi==0.88.0
 filelock==3.8.2
@@ -30,6 +30,10 @@ libclang==14.0.6
 Markdown==3.4.1
 MarkupSafe==2.1.1
 numpy==1.24.1
+nvidia-cublas-cu11==11.10.3.66
+nvidia-cuda-nvrtc-cu11==11.7.99
+nvidia-cuda-runtime-cu11==11.7.99
+nvidia-cudnn-cu11==8.5.0.96
 oauthlib==3.2.2
 opt-einsum==3.3.0
 packaging==22.0
@@ -63,6 +67,7 @@ tensorflow-io-gcs-filesystem==0.29.0
 termcolor==2.1.1
 tokenizers==0.13.2
 tomli==2.0.1
+torch==1.13.1
 tqdm==4.64.1
 transformers==4.25.1
 typer==0.7.0
