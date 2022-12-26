@@ -1,35 +1,24 @@
-from transformers import ViTFeatureExtractor, ViTForImageClassification
+from typing import Any
 from PIL import Image
-import os
-import requests
-from app import model
-from app import feature_extractor
+from rq import get_current_job
+from rq.job import Job
+from redis import Redis
 
 
-# ссылка на папку
-path = 'images/sample.jpg'
-
-
-# feature_extractor = ViTFeatureExtractor.from_pretrained('google/vit-base-patch16-224')
-# model = ViTForImageClassification.from_pretrained('google/vit-base-patch16-224')
-
-# Открыть, Закрыть картинку по пути
-with Image.open(path) as image:
-    # расчет модели
-
-    inputs = feature_extractor(images=image, return_tensors="pt")
+def _calculate_model(path: str, feature_extractor: Any, model: Any) -> str:
+    with Image.open(path) as image:
+        inputs = feature_extractor(images=image, return_tensors="pt")
     outputs = model(**inputs)
     logits = outputs.logits
-    #os.remove('/images/sample.jpg') #удалить картинку из папки
-
-# Предсказание
-predicted_class_idx = logits.argmax(-1).item()
-func_result = model.config.id2label[predicted_class_idx]
+    predicted_class_idx = logits.argmax(-1).item()
+    return model.config.id2label[predicted_class_idx]
 
 
-#Результат
-def result():
-    print("Predicted class:", func_result)
-
+def call_model(path: str, feature_extractor: Any, model: Any):
+    job: Job = get_current_job()
+    redis: Redis = job.connection
+    result = _calculate_model(path, feature_extractor, model)
+    redis.set(str(job.id), result)
+    return result
 
 
