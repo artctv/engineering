@@ -1,7 +1,9 @@
+from pydantic import BaseModel
 from fastapi import APIRouter
 from uuid import UUID
-from rq.job import JobStatus
+from rq.job import Job, JobStatus
 from rq import Queue
+from rq.exceptions import NoSuchJobError
 from .dependencies import get_queue
 from fastapi import Depends
 
@@ -22,9 +24,14 @@ def main(uuid: UUID):
 #Обработка статусов
 @router.get("/retrive/{uuid}", response_model=Response)
 def retrive(uuid:UUID, q:Queue = Depends(get_queue())):
-def main(q: Queue = Depends(get_queue)):
-    print(JobStatus.Failed)
-    status = job.get_status()
+    try:
+        job: Job = Job.fetch(str(uuid), connection = q.connection)
+    except NoSuchJobError:
+        return {"message": "Ошибка: нет такой задачи"}
+    else:
+        status = job.get_status()
+
+
     if status == JobStatus.Canceled:
         return("Ваш запрос был отменен.Повторите попытку позже")
     elif status == JobStatus.Queued:
