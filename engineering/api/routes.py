@@ -1,9 +1,7 @@
 from fastapi import APIRouter
 from uuid import UUID
-from engineering.api.dependencies import get_queue
 from rq.job import JobStatus
 from rq import Queue
-from rq.exceptions import NoSuchJobError
 from .dependencies import get_queue
 from fastapi import Depends
 
@@ -22,9 +20,11 @@ def main(uuid: UUID):
 
 
 #Обработка статусов
+@router.get("/retrive/{uuid}", response_model=Response)
+def retrive(uuid:UUID, q:Queue = Depends(get_queue())):
 def main(q: Queue = Depends(get_queue)):
     print(JobStatus.Failed)
-    status = "canceled"
+    status = job.get_status()
     if status == JobStatus.Canceled:
         return("Ваш запрос был отменен.Повторите попытку позже")
     elif status == JobStatus.Queued:

@@ -1,3 +1,6 @@
+from enum import Enum
+
+
 class JobStatus(str, Enum):
     Queued = 'queued'
     Finished = 'finished'
