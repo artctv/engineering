@@ -15,6 +15,8 @@ def main(uuid: UUID):
     return {"message": "ok"}
 
 
+class Response(BaseModel):
+    message: str
 
 
 
