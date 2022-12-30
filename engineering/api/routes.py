@@ -1,7 +1,8 @@
 from fastapi import APIRouter, UploadFile, HTTPException, Depends, status
 import os
 import uuid
-from engineering.config import Settings
+from engineering.config import settings
+
 
 router: APIRouter = APIRouter()
 
@@ -9,30 +10,23 @@ def is_image_file(file:UploadFile):
     if not any([file.filename.endswith('.jpg'), file.filename.endswith('.jpeg')]):
         raise HTTPException(status_code = status.HTTP_422_UNPROCESSABLE_ENTITY,
                             detail="Только картинки с расширением .jpg или .jpeg")
+    else:
+        filename, file_extension = os.path.splitext(file.filename)
+        return file_extension
 
 @router.get("/")
 def main():
     return {"message": "ok"}
 
-@router.post("/predict", dependencies=[Depends(is_image_file)])
-def create_upload_file(file: UploadFile):
-    return file.filename
+@router.post("/predict")
+def create_upload_file(file: UploadFile, file_extension = Depends(is_image_file)):
 
-id_image = str(uuid.uuid4())
+    id_images = str(uuid.uuid4())
 
-file_loc = "/engineering/images"
+    id_image = id_images + file_extension
+    image_path = settings.base_dir / settings.image_dir_name / id_image
+    with open(f"{image_path}", "wb") as file_object:
+        file_object.write(file.file.read())
 
-if os.path.exists(file_loc):
-    if os.path.isfile(file_loc):
-        print('ФАЙЛ')
-    elif os.path.isdir(file_loc):
-        print('КАТАЛОГ')
-else:
-    try:
-        os.makedirs(file_loc, exists_ok = True)
-    except OSError:
-        print("Создать директорию %s не удалось" % file_loc)
-    else:
-        print("Успешно создана директория %s" % file_loc)
 
-    return {"info": f"file '{UploadFile.id_image}' saved at '{file_loc}'"}
+    return id_images
