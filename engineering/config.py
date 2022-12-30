@@ -34,13 +34,12 @@ class WorkerSettings(BaseSettings):
 
 
 class Settings(BaseSettings):
-
     base_dir: Path = Path(__file__).parent
     image_dir_name: str = "images"
-
     redis: RedisSettings = RedisSettings()
     api: ApiSettings = ApiSettings()
     worker: WorkerSettings = WorkerSettings()
+    time_delay: int = 5
 
     class Config:
         env_file = '.env'
