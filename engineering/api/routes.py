@@ -1,7 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from .dependencies import get_redis
 from redis import Redis
-from fastapi import Request
 from datetime import datetime
 from config import settings
 
