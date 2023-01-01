@@ -1,5 +1,5 @@
 from typing import Generator, Callable
-from fastapi import Depends
+from fastapi import Depends, Request, HTTPException, status
 from redis import ConnectionPool, Redis
 from rq import Queue
 from config import settings
@@ -31,3 +31,13 @@ def get_redis(pool: ConnectionPool = Depends(get_pool)) -> Generator[Redis, None
 def get_queue(redis: Redis = Depends(get_redis)) -> Generator[Queue, None, None]:
     queue: Queue = Queue(name=settings.worker.queues[0], connection=redis)
     yield queue
+
+
+def request_delay(request: Request, redis: Redis = Depends(get_redis)):
+    ip = request.client.host
+    if redis.exists(ip):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Слишком частое обращение"
+        )
+    redis.setex(ip, settings.time_delay, ip)
