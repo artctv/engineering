@@ -29,14 +29,14 @@ class ApiSettings(BaseSettings):
 class WorkerSettings(BaseSettings):
     queues: list[str] = ["default"]
     tasks: dict[str, str] = {
-        "call_model": "worker.tasks.call_model",
+        "some_func": "worker.tasks.some_func",
     }
 
 
 class Settings(BaseSettings):
-
     base_dir: Path = Path(__file__).parent.parent
     image_dir_name: str = "images"
+    time_delay: int = 15
 
     redis: RedisSettings = RedisSettings()
     api: ApiSettings = ApiSettings()
