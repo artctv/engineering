@@ -1,40 +1,40 @@
-from pydantic import BaseModel
-from fastapi import APIRouter
-from uuid import UUID
+from fastapi import APIRouter, Depends, Response, HTTPException, status
+from pydantic import UUID4
+from redis import Redis
 from rq.job import Job, JobStatus
 from rq import Queue
 from rq.exceptions import NoSuchJobError
-from .dependencies import get_queue
-from fastapi import Depends
+from .dependencies import get_queue, get_redis
+from .schemas import ResponseRetrieve
+
 
 router: APIRouter = APIRouter()
 
-#Получение модели
-@router.get("/{uuid}")
-def main(uuid: UUID):
-    return {"message": "ok"}
 
-
-class Response(BaseModel):
-    message: str
-
-
-
-
-
-
-#Обработка статусов
-@router.get("/retrive/{uuid}", response_model=Response)
-def retrive(uuid:UUID, q:Queue = Depends(get_queue)):
-    # try:
-    #     job: Job = Job.fetch(str(uuid), connection = q.connection)
-    # except NoSuchJobError:
-    #     return {"message": "Ошибка: нет такой задачи"}
-    # else:
-    #     status = job.get_status()
-
-    status = JobStatus.Stopped
-    if status == JobStatus.Finished:
-        return "Ваш запрос обработан"
+def get_job_by_id(uuid: UUID4, q: Queue = Depends(get_queue)):
+    try:
+        job: Job = Job.fetch(str(uuid), connection=q.connection)
+    except NoSuchJobError:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Такой задачи нет"
+        )
     else:
-        return status
+        return job
+
+
+@router.get("/retrieve/{uuid}", response_model=ResponseRetrieve)
+def retrive(
+    uuid: UUID4,
+    response: Response,
+    job: Job = Depends(get_job_by_id),
+    redis: Redis = Depends(get_redis)
+):
+    _status: JobStatus = job.get_status()
+
+    if _status == JobStatus.FINISHED:
+        result = redis.get(str(uuid))
+        return {"status": _status, "result": result}
+    else:
+        response.status_code = status.HTTP_201_CREATED
+        return {"status": _status}
