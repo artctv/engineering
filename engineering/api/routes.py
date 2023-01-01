@@ -1,19 +1,17 @@
 import os
-import uuid
-from fastapi import APIRouter, UploadFile, HTTPException, Depends, status
+from uuid import uuid4
+from fastapi import APIRouter, UploadFile, Response, HTTPException, Depends, status
+from pydantic import UUID4
+from redis import Redis
+from rq.job import Job, JobStatus
 from rq import Queue
-from rq.job import Job
+from rq.exceptions import NoSuchJobError
 from config import settings
-from .schemas import ResponsePredict
-from .dependencies import request_delay, get_queue
+from .dependencies import request_delay, get_queue, get_redis
+from .schemas import ResponsePredict, ResponseRetrieve
 
 
 router: APIRouter = APIRouter()
-
-
-@router.get("/")
-def main():
-    return {"message": "ok"}
 
 
 def check_get_ext(file: UploadFile):
@@ -32,7 +30,7 @@ def create_upload_file(
     file_extension: str = Depends(check_get_ext),
     q: Queue = Depends(get_queue)
 ):
-    _id = str(uuid.uuid4())
+    _id = str(uuid4())
     image_name = _id + file_extension
     image_path = settings.base_dir / settings.image_dir_name / image_name
     with open(f"{image_path}", "wb") as file_object:
@@ -42,3 +40,31 @@ def create_upload_file(
 
     return {"id": _id, "status": job.get_status()}
 
+
+def get_job_by_id(uuid: UUID4, q: Queue = Depends(get_queue)):
+    try:
+        job: Job = Job.fetch(str(uuid), connection=q.connection)
+    except NoSuchJobError:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Такой задачи нет"
+        )
+    else:
+        return job
+
+
+@router.get("/retrieve/{uuid}", response_model=ResponseRetrieve)
+def retrive(
+    uuid: UUID4,
+    response: Response,
+    job: Job = Depends(get_job_by_id),
+    redis: Redis = Depends(get_redis)
+):
+    _status: JobStatus = job.get_status()
+
+    if _status == JobStatus.FINISHED:
+        result = redis.get(str(uuid))
+        return {"status": _status, "result": result}
+    else:
+        response.status_code = status.HTTP_201_CREATED
+        return {"status": _status}
