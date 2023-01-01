@@ -25,7 +25,7 @@ class Response(BaseModel):
 
 #Обработка статусов
 @router.get("/retrive/{uuid}", response_model=Response)
-def retrive(uuid:UUID, q:Queue = Depends(get_queue())):
+def retrive(uuid:UUID, q:Queue = Depends(get_queue)):
     # try:
     #     job: Job = Job.fetch(str(uuid), connection = q.connection)
     # except NoSuchJobError:
