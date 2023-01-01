@@ -1,19 +1,14 @@
 import os
-import uuid
-from fastapi import APIRouter, UploadFile, HTTPException, Depends, status
-from rq import Queue
-from rq.job import Job
-from config import settings
-from .schemas import ResponsePredict
-from .dependencies import request_delay, get_queue
-from fastapi import APIRouter, Depends, Response, HTTPException, status
+from uuid import uuid4
+from fastapi import APIRouter, UploadFile, Response, HTTPException, Depends, status
 from pydantic import UUID4
 from redis import Redis
 from rq.job import Job, JobStatus
 from rq import Queue
 from rq.exceptions import NoSuchJobError
-from .dependencies import get_queue, get_redis
-from .schemas import ResponseRetrieve
+from config import settings
+from .dependencies import request_delay, get_queue, get_redis
+from .schemas import ResponsePredict, ResponseRetrieve
 
 
 router: APIRouter = APIRouter()
@@ -35,7 +30,7 @@ def create_upload_file(
     file_extension: str = Depends(check_get_ext),
     q: Queue = Depends(get_queue)
 ):
-    _id = str(uuid.uuid4())
+    _id = str(uuid4())
     image_name = _id + file_extension
     image_path = settings.base_dir / settings.image_dir_name / image_name
     with open(f"{image_path}", "wb") as file_object:
