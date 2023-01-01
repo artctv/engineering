@@ -7,7 +7,6 @@ cachetools==5.2.0
 certifi==2022.12.7
 charset-normalizer==2.1.1
 click==8.1.3
--e git+ssh://git@github.com/artctv/engineering.git@f2f7c1a2c7937c9c89965773f41a2127150a2cc2#egg=engineering
 exceptiongroup==1.1.0
 fastapi==0.88.0
 filelock==3.9.0
