@@ -29,7 +29,7 @@ class ApiSettings(BaseSettings):
 class WorkerSettings(BaseSettings):
     queues: list[str] = ["default"]
     tasks: dict[str, str] = {
-        "some_func": "worker.tasks.some_func",
+        "call_model": "worker.tasks.call_model",
     }
 
 
