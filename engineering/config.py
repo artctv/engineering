@@ -39,7 +39,7 @@ class Settings(BaseSettings):
     redis: RedisSettings = RedisSettings()
     api: ApiSettings = ApiSettings()
     worker: WorkerSettings = WorkerSettings()
-    time_delay: int = 5
+    time_delay: int = 15
 
     class Config:
         env_file = '.env'
