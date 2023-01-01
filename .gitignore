@@ -29,6 +29,9 @@ local/
 ## volumes data
 .volumes
 
+## images data
+images
+
 # IDE/Code specific
 .idea
 .atom
