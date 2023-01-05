@@ -7,7 +7,7 @@ import platform
 from config import settings
 
 
-class BaseWorker:
+class ExtendedWorker(Worker):
     _feature_extractor: Any
     _model: Any
 
@@ -16,8 +16,6 @@ class BaseWorker:
         self._model = ViTForImageClassification.from_pretrained('google/vit-base-patch16-224')
         super().__init__(*args, **kwargs)
 
-
-class ExtendedWorker(BaseWorker, Worker):
     def execute_job(self, job, queue):
         job.args = (job.args[0], self._feature_extractor, self._model)
         return self.perform_job(job, queue)
@@ -26,7 +24,15 @@ class ExtendedWorker(BaseWorker, Worker):
         return super().work(*args, **kwargs)
 
 
-class ExtendedWindowWorker(BaseWorker, WindowsWorker):
+class ExtendedWindowWorker(WindowsWorker):
+    _feature_extractor: Any
+    _model: Any
+
+    def __init__(self, *args, **kwargs):
+        self._feature_extractor = ViTFeatureExtractor.from_pretrained('google/vit-base-patch16-224')
+        self._model = ViTForImageClassification.from_pretrained('google/vit-base-patch16-224')
+        super().__init__(*args, **kwargs)
+
     def execute_job(self, job, queue):
         job.args = (job.args[0], self._feature_extractor, self._model)
         return self.perform_job(job, queue)
@@ -42,11 +48,11 @@ def run():
         db=settings.redis.db,
         password=settings.redis.password
     )
-    if platform.system() == "Windows":
-        worker: Worker = ExtendedWindowWorker(settings.worker.queues)
-    else:
-        worker: Worker = ExtendedWorker(settings.worker.queues)
 
     with Connection(connection=redis):
+        if platform.system() == "Windows":
+            worker: Worker = ExtendedWindowWorker(settings.worker.queues)
+        else:
+            worker: Worker = ExtendedWorker(settings.worker.queues)
         worker.work()
 
