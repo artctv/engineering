@@ -30,10 +30,6 @@ libclang
 Markdown
 MarkupSafe
 numpy
-nvidia-cublas-cu11
-nvidia-cuda-nvrtc-cu11
-nvidia-cuda-runtime-cu11
-nvidia-cudnn-cu11
 oauthlib
 opt-einsum
 packaging
