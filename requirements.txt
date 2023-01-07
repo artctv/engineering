@@ -51,6 +51,7 @@ requests
 requests-oauthlib
 rfc3986
 rq
+rq-win @ git+https://github.com/michaelbrooks/rq-win.git@c6e65e38f8a6ca99a0c8e0dd6fe35f9b92837cca
 rsa
 six
 sniffio
@@ -75,4 +76,3 @@ uvicorn
 Werkzeug
 wrapt
 zipp
-rq-win @ git+https://github.com/michaelbrooks/rq-win.git@c6e65e38f8a6ca99a0c8e0dd6fe35f9b92837cca
