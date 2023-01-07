@@ -54,7 +54,7 @@ def get_job_by_id(uuid: UUID4, q: Queue = Depends(get_queue)):
 
 
 @router.get("/retrieve/{uuid}", response_model=ResponseRetrieve)
-def retrive(
+def retrieve(
     uuid: UUID4,
     response: Response,
     job: Job = Depends(get_job_by_id),
