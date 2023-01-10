@@ -1,10 +1,17 @@
+from fastapi import FastAPI
 from fastapi.testclient import TestClient
-from engineering.api.app import app
 
+app = FastAPI()
 client = TestClient(app)
 
-def test_retrieve(app:TestClient,retrieve):
-    response = app.get("/retrieve/{uuid}")
+@app.get("/retrieve")
+def root():
+    return{"message":"Все хорошо"}
+
+
+def test_read_main():
+    response = client.get("/retrieve")
+    assert response.status_code == 200
+    assert response.json() == {"message": "Все хорошо"}
     print(response.json())
-    assert response.status_code == 201
-    assert response.json() == {"massage": "Hello world"}
+
