@@ -1,6 +1,6 @@
 from io import BytesIO
 from PIL import Image
-
+from config import settings
 
 _image_formats = ["jpeg", "png"]
 
@@ -14,3 +14,5 @@ def generate_fake_image(_format: str):
     in_memory_file.name = f'test_image.{_format}'
     in_memory_file.seek(0)
     return in_memory_file
+
+

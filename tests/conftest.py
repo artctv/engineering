@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from engineering.config import settings
 from engineering.api.dependencies import get_queue, request_delay
-from .mocks import overrided_queue, overrided_delay
+from .mocks import overrided_queue, overrided_delay, mocked_task
 
 # scope can be one of this: ["function", "module", "class", "package", "session"]
 
