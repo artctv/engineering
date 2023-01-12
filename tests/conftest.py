@@ -1,6 +1,9 @@
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
+from engineering.config import settings
+from engineering.api.dependencies import get_queue, request_delay
+from .mocks import overrided_queue, overrided_delay, mocked_task
 from engineering.api.routes import get_job_by_id
 from engineering.api.dependencies import get_queue, request_delay, get_redis
 from .mocks import overrided_queue, overrided_delay, overrided_redis, overrided_get_job_by_id

@@ -1,4 +1,6 @@
 from typing import Union
+from fakeredis import FakeStrictRedis
+from rq import Queue
 
 
 simple_fake_reids = {}
@@ -36,5 +38,18 @@ def overrided_delay():
 
 def overrided_get_job_by_id():
     return MockJob()
+
+
+def overrided_fake_queue():
+    queue = Queue(is_async=False, connection=FakeStrictRedis())
+    return queue
+
+
+def mocked_task(image_path, *args, **kwargs):
+    print(image_path)
+
+
+
+
 
 

@@ -36,12 +36,13 @@ def create_upload_file(
     with open(f"{image_path}", "wb") as file_object:
         file_object.write(file.file.read())
 
-    job: Job = q.enqueue("worker.tasks.call_model", image_path, job_id=_id)
+    job: Job = q.enqueue(settings.worker.tasks["call_model"], image_path, job_id=_id)
 
     return {"id": _id, "status": job.get_status()}
 
 
 def get_job_by_id(uuid: UUID4, q: Queue = Depends(get_queue)):
+    print(q.connection)
     try:
         job: Job = Job.fetch(str(uuid), connection=q.connection)
     except NoSuchJobError:
