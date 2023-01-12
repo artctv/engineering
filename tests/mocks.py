@@ -1,12 +1,7 @@
-class c_status:
-    def get_status(self, *args, **kwargs):
-        # print(args, kwargs)
-        return 'finished'
-
-
-
-
 from typing import Union
+
+
+simple_fake_reids = {}
 
 
 class MockJob:
@@ -14,7 +9,8 @@ class MockJob:
     status: Union[str, None]
 
     def __init__(self):
-        self.status = None
+        if not hasattr(self, "status"):
+            self.status = None
 
     def get_status(self, *args, **kwargs):  # noqa
         return self.status
@@ -27,14 +23,18 @@ class MockQueue:
 
 
 def overrided_queue():
-    pass
+    return MockQueue()
+
+
+def overrided_redis():
+    return simple_fake_reids
 
 
 def overrided_delay():
     pass
 
+
 def overrided_get_job_by_id():
-    object_job = c_status()
-    return object_job
+    return MockJob()
 
 
