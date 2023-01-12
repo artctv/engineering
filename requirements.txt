@@ -9,6 +9,7 @@ certifi
 charset-normalizer
 click
 exceptiongroup
+fakeredis
 fastapi
 filelock
 flatbuffers
@@ -55,6 +56,7 @@ rq-win @ git+https://github.com/michaelbrooks/rq-win.git@c6e65e38f8a6ca99a0c8e0d
 rsa
 six
 sniffio
+sortedcontainers
 starlette
 tensorboard
 tensorboard-data-server
