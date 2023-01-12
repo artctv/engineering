@@ -12,6 +12,7 @@ def test_retrive_with_result(client):
     result = response.json()
     assert "status" in result
     assert "result" in result
+    assert result["result"] == "some result"
 
 
 def test_retrive_no_result(client):
