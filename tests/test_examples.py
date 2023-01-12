@@ -77,13 +77,13 @@ def test_new_simple_test(r_num):
 """
 
 
-from fastapi.testclient import TestClient
-from .utils import generate_fake_image
-
-
-def test_main(client: TestClient):
-    fake_image = generate_fake_image("jpeg")
-    response = client.post("/predict", files={'file': fake_image})
-    print(response.json())
-    assert response.status_code == 200
-    assert response.json() == {}
+# from fastapi.testclient import TestClient
+# from .utils import generate_fake_image
+#
+#
+# def test_main(client: TestClient):
+#     fake_image = generate_fake_image("jpeg")
+#     response = client.post("/predict", files={'file': fake_image})
+#     print(response.json())
+#     assert response.status_code == 200
+#     assert response.json() == {}

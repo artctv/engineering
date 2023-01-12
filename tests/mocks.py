@@ -1,13 +1,25 @@
-class Cl_enqueue:
-    def get_status(self, *args, **kwargs):
-        return 'queued'
-    def enqueue(self,*args, **kwargs):
-        return self
+from typing import Union
+
+
+class MockJob:
+
+    status: Union[str, None]
+
+    def __init__(self):
+        self.status = None
+
+    def get_status(self, *args, **kwargs):  # noqa
+        return self.status
+
+
+class MockQueue:
+
+    def enqueue(self, *args, **kwargs):  # noqa
+        return MockJob()
 
 
 def overrided_queue():
-    object_something = Cl_enqueue()
-    yield object_something
+    return MockQueue()
 
 
 def overrided_delay():
