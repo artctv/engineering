@@ -1,3 +1,11 @@
+class c_status:
+    def get_status(self, *args, **kwargs):
+        # print(args, kwargs)
+        return 'finished'
+
+
+
+
 from typing import Union
 
 
@@ -19,9 +27,14 @@ class MockQueue:
 
 
 def overrided_queue():
-    return MockQueue()
+    pass
 
 
 def overrided_delay():
     pass
+
+def overrided_get_job_by_id():
+    object_job = c_status()
+    return object_job
+
 
