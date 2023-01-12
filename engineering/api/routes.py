@@ -42,7 +42,6 @@ def create_upload_file(
 
 
 def get_job_by_id(uuid: UUID4, q: Queue = Depends(get_queue)):
-    print(q.connection)
     try:
         job: Job = Job.fetch(str(uuid), connection=q.connection)
     except NoSuchJobError:
