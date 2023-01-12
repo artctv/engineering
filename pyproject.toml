@@ -1,8 +1,13 @@
 [tool.poetry]
 name = "engineering"
 version = "0.0.1"
-description = "Simple API with ML model"
-authors = ["Artem <artctvcode@gmail.com>"]
+description = "Simple API with ML model and background tasks"
+authors = [
+    "Artem <artctvcode@gmail.com>",
+    "Alina <kalimullina.alina2009@yandex.ru>",
+    "Elena <kukarceva_elena@mail.ru>",
+    "Elvina <Kalimullina.elvina2016@yandex.ru>"
+]
 readme = "README.md"
 
 [tool.poetry.dependencies]
