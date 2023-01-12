@@ -46,7 +46,8 @@ def overrided_fake_queue():
 
 
 def mocked_task(image_path, *args, **kwargs):
-    print(image_path)
+    # some good stuff
+    pass
 
 
 

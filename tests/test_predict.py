@@ -5,7 +5,7 @@ from .mocks import MockJob
 from .utils import generate_fake_image
 
 
-def test_main(client: TestClient, mocker: MockFixture):
+def test_predict(client: TestClient, mocker: MockFixture):
     mocked_etc_release_data = mocker.mock_open()
     mocker.patch("builtins.open", mocked_etc_release_data)
     fake_image = generate_fake_image("jpeg")

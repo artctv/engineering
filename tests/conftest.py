@@ -1,13 +1,12 @@
+import os
+import shutil
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
-from engineering.config import settings
-from engineering.api.dependencies import get_queue, request_delay
-from .mocks import overrided_queue, overrided_delay, mocked_task
 from engineering.api.routes import get_job_by_id
 from engineering.api.dependencies import get_queue, request_delay, get_redis
 from .mocks import overrided_queue, overrided_delay, overrided_redis, overrided_get_job_by_id
-
+from config import settings
 
 # scope can be one of this: ["function", "module", "class", "package", "session"]
 
@@ -27,5 +26,10 @@ def client(app: FastAPI) -> TestClient:
     return TestClient(app)
 
 
-
+@pytest.fixture(scope="session", autouse=True)
+def make_dirs():
+    base_dir, folder = settings.base_dir, settings.image_dir_name
+    os.makedirs(base_dir / folder, exist_ok=True)
+    yield
+    shutil.rmtree(base_dir / folder)
 
