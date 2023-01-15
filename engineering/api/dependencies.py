@@ -1,3 +1,4 @@
+import os
 from typing import Generator, Callable
 from fastapi import Depends, Request, HTTPException, status
 from redis import ConnectionPool, Redis
@@ -7,7 +8,7 @@ from config import settings
 
 def _get_pool() -> Callable:
     pool: ConnectionPool = ConnectionPool(
-        host=settings.redis.host,
+        host=os.getenv("redis_host") or settings.redis.host,
         port=settings.redis.port,
         db=settings.redis.db,
         password=settings.redis.password

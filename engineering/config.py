@@ -1,9 +1,10 @@
+import os
 from pydantic import BaseSettings
 from pathlib import Path
 
 
 class RedisSettings(BaseSettings):
-    host: str = "0.0.0.0"
+    host: str = os.getenv("redis_host") or "0.0.0.0"
     port: int = 6379
     db: int = 0
     password: str = 'password'
@@ -14,9 +15,9 @@ class ApiSettings(BaseSettings):
     description: str = "Simple API with ML model"
     version: str = "0.0.1"
 
-    host: str = "127.0.0.1"
+    host: str = os.getenv("host") or "127.0.0.1"
     port: int = 5000
-    reload: bool = True
+    reload: bool = os.getenv("reload") or True
 
     origins: list[str] = [
         "http://localhost",
