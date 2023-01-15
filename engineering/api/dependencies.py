@@ -37,7 +37,7 @@ def request_delay(request: Request, redis: Redis = Depends(get_redis)):
     ip = request.client.host
     if redis.exists(ip):
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
+            status_code=status.HTTP_400_BAD_REQUEST,
             detail="Слишком частое обращение"
         )
     redis.setex(ip, settings.time_delay, ip)
