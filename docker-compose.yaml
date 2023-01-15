@@ -1,0 +1,71 @@
+version: "3.8"
+
+services:
+
+  redis:
+    image: redis:latest
+    command: redis-server --requirepass password
+    container_name: redis
+    hostname: redis
+    restart: always
+    volumes:
+      - ./.volumes/redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+     - app
+
+  redis-commander:
+    container_name: redis-commander
+    hostname: redis-commander
+    image: rediscommander/redis-commander:latest
+    restart: always
+    environment:
+      - REDIS_HOSTS=local:redis:6379:0:password
+    ports:
+    - "5050:8081"
+    networks:
+      - app
+    depends_on:
+    - redis
+
+  api:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    restart: always
+    container_name: api
+    networks:
+      - app
+    depends_on:
+      - redis
+    volumes:
+      - bind-images:/engineering/images
+    ports:
+      - "5000:5000"
+    environment:
+      host: "0.0.0.0"
+      redis_host: redis
+      reload: "false"
+
+  worker:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    command: "worker"
+    restart: always
+    container_name: worker
+    networks:
+      - app
+    depends_on:
+      - redis
+    volumes:
+      - bind-images:/engineering/images
+    environment:
+      redis_host: redis
+
+volumes:
+  bind-images:
+
+networks:
+  app:
