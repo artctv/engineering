@@ -23,7 +23,6 @@ transformers = "^4.25.1"
 tensorflow = "^2.11.0"
 pillow = "^9.3.0"
 torch = "^1.13.1"
-rq-win = {git = "https://github.com/michaelbrooks/rq-win.git"}
 fakeredis = "^2.4.0"
 
 
